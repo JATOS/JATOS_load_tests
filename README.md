@@ -6,6 +6,8 @@ Allows limiting CPUs, memory, thread pool and DB connection pool.
 
 Configuration via `jatos.conf`, `mysql.conf`, `nginx.conf`, evironment variables and `compose.yaml`.
 
+Gatling simulations are under `./gatling-charts-highcharts-bundle-3.2.1/user-files/simulations`.
+
 To just start JATOS:
 
 ```shell

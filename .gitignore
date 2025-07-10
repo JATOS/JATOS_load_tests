@@ -3,4 +3,5 @@ jatos-data
 gatling-charts-highcharts-bundle-3.2.1/target
 gatling-charts-highcharts-bundle-3.2.1/results/
 jatos_load_test.log
-
+gatling_run.log
+.idea

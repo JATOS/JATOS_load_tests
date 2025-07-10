@@ -16,7 +16,7 @@ services:
       - 443:443
 
   jatos:
-    image: jatos/jatos:3.9.7
+    image: jatos/jatos:${JATOS_VERSION:-latest}
     restart: unless-stopped
     ports:
       - 9000:9000

@@ -17,11 +17,11 @@ class JatosMassiveAssetsLoading extends Simulation {
   val threadPoolSize = System.getenv("JATOS_THREADPOOL_SIZE")
   val host = System.getenv("JATOS_HOST")
   val studyCode = System.getenv("JATOS_STUDY_CODE")
-  val simulation = System.getenv("SIMULATION")
-  val injectType = System.getenv("INJECT_TYPE")
-  val users = System.getenv("USERS").toDouble
-  val duration = System.getenv("DURATION").toLong
-  val successRate = System.getenv("SUCCESS_RATE").toDouble
+  val simulation = System.getenv("GATLING_SIMULATION")
+  val injectType = System.getenv("GATLING_INJECT_TYPE")
+  val users = System.getenv("GATLING_USERS").toDouble
+  val duration = System.getenv("GATLING_DURATION").toLong
+  val successRate = System.getenv("GATLING_SUCCESS_RATE").toDouble
 
   println(s"cpus:$cpus mem:$mem javaXmx:$javaXmx dbPoolSize:$dbPoolSize threadPoolSize:$threadPoolSize $host $studyCode $simulation $injectType users:$users duration:$duration successRate:$successRate")
 

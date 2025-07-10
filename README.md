@@ -2,12 +2,20 @@
 
 Uses docker compose to run JATOS with MySQL and Nginx.
 
-Configuration via `jatos.conf`, `mysql.conf`, `nginx.conf`, evironment variables and `compose.yaml`.
+Allows limiting CPUs, memory, thread pool and DB connection pool.
 
-Use `run.sh` script to run a batch of load tests.
+Configuration via `jatos.conf`, `mysql.conf`, `nginx.conf`, evironment variables and `compose.yaml`.
 
 To just start JATOS:
 
 ```shell
 docker compose up
 ```
+
+Import `jatos_load_test.jzip` into JATOS.
+
+Use `run.sh` script to run a batch of load tests. You will have to change the study code.
+
+Gatling logs are in `tail -f ./jatos_load_test.log`.
+
+JATOS logs: `tail -f jatos-logs/application.log`

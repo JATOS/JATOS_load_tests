@@ -9,7 +9,7 @@ import io.gatling.jdbc.Predef._
 import java.net.URLDecoder
 
 class JatosDefaultSimulation extends Simulation {
-
+  val jatosVersion = System.getenv("JATOS_VERSION")
   val cpus = System.getenv("JATOS_CPUS")
   val mem = System.getenv("JATOS_MEM")
   val javaXmx = System.getenv("JAVA_XMX")
@@ -23,7 +23,7 @@ class JatosDefaultSimulation extends Simulation {
   val duration = System.getenv("GATLING_DURATION").toLong
   val successRate = System.getenv("GATLING_SUCCESS_RATE").toDouble
 
-  println(s"cpus:$cpus mem:$mem javaXmx:$javaXmx dbPoolSize:$dbPoolSize threadPoolSize:$threadPoolSize $host $studyCode $simulation $injectType users:$users duration:$duration successRate:$successRate")
+  println(s"$jatosVersion cpus:$cpus mem:$mem javaXmx:$javaXmx dbPoolSize:$dbPoolSize threadPoolSize:$threadPoolSize $host $studyCode $simulation $injectType users:$users duration:$duration successRate:$successRate")
 
   val httpProtocol = http
     .baseUrl(s"https://$host")

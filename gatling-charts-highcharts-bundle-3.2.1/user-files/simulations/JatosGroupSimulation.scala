@@ -10,6 +10,7 @@ import java.net.URLDecoder
 
 class JatosGroupSimulation extends Simulation {
 
+  val jatosVersion = System.getenv("JATOS_VERSION")
   val cpus = System.getenv("JATOS_CPUS")
   val mem = System.getenv("JATOS_MEM")
   val javaXmx = System.getenv("JAVA_XMX")
@@ -23,7 +24,7 @@ class JatosGroupSimulation extends Simulation {
   val duration = System.getenv("GATLING_DURATION").toLong
   val successRate = System.getenv("GATLING_SUCCESS_RATE").toDouble
 
-  println(s"cpus:$cpus mem:$mem javaXmx:$javaXmx dbPoolSize:$dbPoolSize threadPoolSize:$threadPoolSize $host $studyCode $simulation $injectType users:$users duration:$duration successRate:$successRate")
+  println(s"$jatosVersion cpus:$cpus mem:$mem javaXmx:$javaXmx dbPoolSize:$dbPoolSize threadPoolSize:$threadPoolSize $host $studyCode $simulation $injectType users:$users duration:$duration successRate:$successRate")
 
   val httpProtocol = http
     .baseUrl(s"https://$host")
@@ -51,36 +52,50 @@ class JatosGroupSimulation extends Simulation {
 
 
   val scn = scenario("JatosGroupSimulation")
+    .exitBlockOnFail {
     .exec(session => session.set("componentUuid1", "50e32e16-1831-495b-9826-f05e1eeccc87"))
-    .exec(session => session.set("componentUuid2", "cf187900-9e44-44b0-9e3d-779ba80ceaed"))
-    .exec(
-      http("Start").get("/publix/B64GEqy93Fe").check(bodyString.saveAs("BODY")).headers(header_html)
-    ).exec(getCookieValue(CookieKey("JATOS_IDS_0"))
-  ).exec(session => {
-    val cookie = session("JATOS_IDS_0").as[String]
-    val cookieParas = parseUrlParameters(cookie)
-    val studyResultUuid = cookieParas("studyResultUuid")
-    println(s"JATOS_IDS_0: $studyResultUuid")
-    session.set("studyResultUuid", studyResultUuid)
-  }).exec(
-    http("Get init data").get("/publix/${studyResultUuid}/${componentUuid1}/initData").headers(header_json)
-  ).exec(
-    ws("Open batch channel").wsName("batchChannel").connect("/publix/${studyResultUuid}/batch/open")
-  ).exec(
-    http("Heartbeat").post("/publix/${studyResultUuid}/heartbeat").headers(header_ajax)
-  ).exec(
-    ws("Join group").wsName("groupChannel").connect("/publix/${studyResultUuid}/group/join")
-  ).pause(5 seconds).exec(
-    http("Reassign group").get("/publix/${studyResultUuid}/group/reassign").headers(header_ajax)
-  ).pause(5 seconds).exec(
-    http("Leave group").get("/publix/${studyResultUuid}/group/leave").headers(header_ajax)
-  ).pause(5 seconds).exec(
-    http("Post study session data").post("/publix/${studyResultUuid}/studySessionData").headers(header_ajax).body(StringBody("""{"foo":"bar"}"""))
-  ).exec(
-    http("Post results").post("/publix/${studyResultUuid}/${componentUuid1}/resultData").headers(header_ajax).body(StringBody("""{"foo":"bar"}"""))
-  ).exec(
-    http("Finish study").get("/publix/${studyResultUuid}/end").headers(header_ajax)
-  ).exec(ws("Close batch channel").wsName("batchChannel").close)
+        .exec(session => session.set("componentUuid2", "cf187900-9e44-44b0-9e3d-779ba80ceaed"))
+        .exec(
+          http("Start").get("/publix/B64GEqy93Fe").check(bodyString.saveAs("BODY")).headers(header_html)
+        )
+        .exec(getCookieValue(CookieKey("JATOS_IDS_0"))
+        )
+        .exec(session => {
+          val cookie = session("JATOS_IDS_0").as[String]
+          val cookieParas = parseUrlParameters(cookie)
+          val studyResultUuid = cookieParas("studyResultUuid")
+          println(s"JATOS_IDS_0: $studyResultUuid")
+          session.set("studyResultUuid", studyResultUuid)
+        })
+        .exec(
+          http("Get init data").get("/publix/${studyResultUuid}/${componentUuid1}/initData").headers(header_json)
+        )
+        .exec(
+          ws("Open batch channel").wsName("batchChannel").connect("/publix/${studyResultUuid}/batch/open")
+        )
+        .exec(
+          http("Heartbeat").post("/publix/${studyResultUuid}/heartbeat").headers(header_ajax)
+        )
+        .exec(
+          ws("Join group").wsName("groupChannel").connect("/publix/${studyResultUuid}/group/join")
+        ).pause(5 seconds)
+        .exec(
+          http("Reassign group").get("/publix/${studyResultUuid}/group/reassign").headers(header_ajax)
+        ).pause(5 seconds)
+        .exec(
+          http("Leave group").get("/publix/${studyResultUuid}/group/leave").headers(header_ajax)
+        ).pause(5 seconds)
+        .exec(
+          http("Post study session data").post("/publix/${studyResultUuid}/studySessionData").headers(header_ajax).body(StringBody("""{"foo":"bar"}"""))
+        )
+        .exec(
+          http("Post results").post("/publix/${studyResultUuid}/${componentUuid1}/resultData").headers(header_ajax).body(StringBody("""{"foo":"bar"}"""))
+        )
+        .exec(
+          http("Finish study").get("/publix/${studyResultUuid}/end").headers(header_ajax)
+        )
+        .exec(ws("Close batch channel").wsName("batchChannel").close)
+    }
 
   def parseUrlParameters(url: String) = {
     url.split("&").map(v => {

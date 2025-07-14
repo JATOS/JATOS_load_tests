@@ -8,6 +8,8 @@ Configuration via `jatos.conf`, `mysql.conf`, `nginx.conf`, evironment variables
 
 Gatling simulations are under `./gatling-charts-highcharts-bundle-3.2.1/user-files/simulations`.
 
+Can run parallel to a local JATOS + MySQL since it is using port 9001 and 3307 respectively. 
+
 To just start JATOS:
 
 ```shell

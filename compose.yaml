@@ -19,7 +19,7 @@ services:
     image: jatos/jatos:${JATOS_VERSION:-latest}
     restart: unless-stopped
     ports:
-      - 9000:9000
+      - 9001:9000
     deploy:
       resources:
         limits:
@@ -56,7 +56,7 @@ services:
     image: mysql:8.0.32-debian
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "3307:3306"
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 2s

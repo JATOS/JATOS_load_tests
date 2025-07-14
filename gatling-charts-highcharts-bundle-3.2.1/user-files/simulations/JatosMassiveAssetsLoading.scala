@@ -53,12 +53,12 @@ class JatosMassiveAssetsLoading extends Simulation {
 
   val scn = scenario("JatosMassiveAssetsLoading")
     .exitBlockOnFail {
-      .exec(session => session.set("componentUuid1", "50e32e16-1831-495b-9826-f05e1eeccc87"))
+      exec(session => session.set("componentUuid1", "50e32e16-1831-495b-9826-f05e1eeccc87"))
         .exec(session => session.set("componentUuid2", "cf187900-9e44-44b0-9e3d-779ba80ceaed"))
 
         // ### 1. Component ###
         .exec(
-          http("Start").get("/publix/B64GEqy93Fe").check(bodyString.saveAs("BODY")).headers(header_html)
+          http("Start").get(s"/publix/$studyCode").check(bodyString.saveAs("BODY")).headers(header_html)
         )
         .exec(getCookieValue(CookieKey("JATOS_IDS_0"))
         )

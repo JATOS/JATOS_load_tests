@@ -58,7 +58,7 @@ class JatosAppendSimulation extends Simulation {
 
         // ### 1. Component ###
         .exec(
-          http("Start").get("/publix2/B64GEqy93Fe").check(bodyString.saveAs("BODY")).headers(header_html)
+          http("Start").get(s"/publix/$studyCode").check(bodyString.saveAs("BODY")).headers(header_html)
         )
         .exec(getCookieValue(CookieKey("JATOS_IDS_0")))
         .exec(session => {
